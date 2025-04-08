@@ -1,3 +1,14 @@
+/**
+* Author: Carl Shi
+* Assignment: Rise of the AI
+* Date due: 2025-04-05, 11:59pm
+* I pledge that I have completed this assignment without
+* collaborating with anyone else, in conformance with the
+* NYU School of Engineering Policies and Procedures on
+* Academic Misconduct.
+**/
+
+
 #include "LevelB.h"
 #include "Utility.h"
 
@@ -5,7 +16,6 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "assets/Mouse-Sheet.png",
-//           PLATFORM_FILEPATH[]    = "assets/TerrainPart.png",
             ENEMY_WALK_FILEPATH[] = "assets/Cat-Walk.png";
 
 unsigned int LEVELB_DATA[] =
@@ -100,21 +110,12 @@ void LevelB::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
 
-    // For each enemy, let ai_walk handle the patrol behavior.
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
        m_game_state.enemies[i].ai_walk();
        m_game_state.enemies[i].update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
     }
     
-//    for (int i = 0; i < ENEMY_COUNT; i++){
-//        if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
-//            m_game_state.life--;
-//        }
-//        if(m_game_state.life <=0){
-//            return;
-//        }
-//    }
 //    
     for (int i = 0; i < ENEMY_COUNT; i++){
         if(m_game_state.player->check_collision(&m_game_state.enemies[i])){

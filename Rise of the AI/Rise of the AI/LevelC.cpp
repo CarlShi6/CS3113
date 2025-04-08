@@ -1,3 +1,14 @@
+/**
+* Author: Carl Shi
+* Assignment: Rise of the AI
+* Date due: 2025-04-05, 11:59pm
+* I pledge that I have completed this assignment without
+* collaborating with anyone else, in conformance with the
+* NYU School of Engineering Policies and Procedures on
+* Academic Misconduct.
+**/
+
+
 #include "LevelC.h"
 #include "Utility.h"
 
@@ -5,7 +16,6 @@
 #define LEVEL_HEIGHT 8
 
 constexpr char SPRITESHEET_FILEPATH[] = "assets/Mouse-Sheet.png",
-//           PLATFORM_FILEPATH[]    = "assets/TerrainPart.png",
             ENEMY_FLY_FILEPATH[] = "assets/Cat-Sit.png",
             ENEMY_WALK_FILEPATH[] = "assets/Cat-Walk.png";
 
@@ -114,46 +124,12 @@ void LevelC::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
     
-//    const float LEFT_BOUND = 2.0f;
-//       const float RIGHT_BOUND = 12.0f;
-//       Entity &flyingEnemy = m_game_state.enemies[1];
-//       glm::vec3 pos = flyingEnemy.get_position();
-//       glm::vec3 movement = flyingEnemy.get_movement();
-//       // If no horizontal movement is set, initialize to moving right.
-//       if (glm::length(movement) == 0.0f) {
-//           movement.x = 1.0f;
-//           flyingEnemy.set_movement(movement);
-//           flyingEnemy.face_right();
-//       }
-//       // Update horizontal position.
-//       pos.x += flyingEnemy.get_speed() * delta_time * movement.x;
-//       // Reverse direction if boundaries reached.
-//       if (pos.x < LEFT_BOUND) {
-//           pos.x = LEFT_BOUND;
-//           flyingEnemy.set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
-//           flyingEnemy.face_right();
-//       }
-//       else if (pos.x > RIGHT_BOUND) {
-//           pos.x = RIGHT_BOUND;
-//           flyingEnemy.set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
-//           flyingEnemy.face_left();
-//       }
-//       flyingEnemy.set_position(pos);
-//       // Call update to ensure collision and model matrix are updated.
-//       flyingEnemy.update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
-
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
        m_game_state.enemies[i].ai_walk();
        m_game_state.enemies[i].update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
     }
-    // For each enemy, let ai_walk handle the patrol behavior.
-
-//   m_game_state.enemies[0].ai_walk();
-//   m_game_state.enemies[0].update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
-
-
-    
+  
     for (int i = 0; i < ENEMY_COUNT; i++){
         if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
             Mix_PlayChannel(-1, m_game_state.die_sfx, 0);

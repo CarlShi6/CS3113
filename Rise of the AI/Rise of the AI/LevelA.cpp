@@ -1,3 +1,13 @@
+/**
+* Author: Carl Shi
+* Assignment: Rise of the AI
+* Date due: 2025-04-05, 11:59pm
+* I pledge that I have completed this assignment without
+* collaborating with anyone else, in conformance with the
+* NYU School of Engineering Policies and Procedures on
+* Academic Misconduct.
+**/
+
 #include "LevelA.h"
 #include "Utility.h"
 
@@ -94,11 +104,7 @@ void LevelA::initialise()
     /**
      BGM and SFX
 //     */
-//    Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096);
 //    
-//    m_game_state.bgm = Mix_LoadMUS("assets/tom_and_jerry_theme.mp3");
-//    Mix_PlayMusic(m_game_state.bgm, -1);
-//    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
     
     m_game_state.jump_sfx = Mix_LoadWAV("assets/jump.wav");
     m_game_state.die_sfx = Mix_LoadWAV("assets/die.wav");

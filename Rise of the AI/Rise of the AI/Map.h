@@ -18,7 +18,6 @@ private:
     int m_width;
     int m_height;
     
-    // Here, the level_data is the numerical "drawing" of the map
     unsigned int *m_level_data;
     GLuint m_texture_id;
     
@@ -26,12 +25,9 @@ private:
     int   m_tile_count_x;
     int   m_tile_count_y;
     
-    // Just like with rendering text, we're rendering several sprites at once
-    // So we need vectors to store their respective vertices and texture coordinates
     std::vector<float> m_vertices;
     std::vector<float> m_texture_coordinates;
     
-    // The boundaries of the map
     float m_left_bound, m_right_bound, m_top_bound, m_bottom_bound;
     
 public:
