@@ -93,6 +93,7 @@ void LevelB::initialise()
     
     
     m_game_state.jump_sfx = Mix_LoadWAV("assets/jump.wav");
+    m_game_state.die_sfx = Mix_LoadWAV("assets/die.wav");
 }
 
 void LevelB::update(float delta_time)
@@ -106,17 +107,18 @@ void LevelB::update(float delta_time)
        m_game_state.enemies[i].update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
     }
     
+//    for (int i = 0; i < ENEMY_COUNT; i++){
+//        if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
+//            m_game_state.life--;
+//        }
+//        if(m_game_state.life <=0){
+//            return;
+//        }
+//    }
+//    
     for (int i = 0; i < ENEMY_COUNT; i++){
         if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
-            m_game_state.life--;
-        }
-        if(m_game_state.life <=0){
-            return;
-        }
-    }
-    
-    for (int i = 0; i < ENEMY_COUNT; i++){
-        if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
+            Mix_PlayChannel(-1, m_game_state.die_sfx, 0);
             m_game_state.life--;
             if(m_game_state.life <=0){
                 m_game_state.next_scene_id = 5;
@@ -130,7 +132,7 @@ void LevelB::update(float delta_time)
         
     }
     
-    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 2;
+    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id = 3;
 
 }
 

@@ -6,6 +6,7 @@
 
 constexpr char SPRITESHEET_FILEPATH[] = "assets/Mouse-Sheet.png",
 //           PLATFORM_FILEPATH[]    = "assets/TerrainPart.png",
+            ENEMY_FLY_FILEPATH[] = "assets/Cat-Sit.png",
             ENEMY_WALK_FILEPATH[] = "assets/Cat-Walk.png";
 
 unsigned int LEVELC_DATA[] =
@@ -13,7 +14,7 @@ unsigned int LEVELC_DATA[] =
     13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    29, 0, 0, 0, 0, 0, 0, 0, 7, 0, 7, 0, 7, 0,
+    29, 0, 0, 0, 0, 0, 0, 7, 7, 7, 7, 7, 7, 0,
     29, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0,
     29, 0, 0, 0, 0, 7, 7, 7, 7, 7, 7, 7, 0, 0,
     29, 0, 0, 0, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -89,34 +90,73 @@ void LevelC::initialise()
     m_game_state.enemies[0].set_animation_index(0);
     m_game_state.enemies[0].set_enemy_walking(enemy_walking_animation);
 
-    //Walking enemies
+    //FLying enemies
+    
+    GLuint enemy_fly_texture_id = Utility::load_texture(ENEMY_FLY_FILEPATH);
+    m_game_state.enemies[1] = Entity(
+       enemy_fly_texture_id,
+       1.0f,
+       2.0f, 2.0f,
+       ENEMY, WALKER, WALKING
+    );
+    m_game_state.enemies[1].set_position(glm::vec3(5.0f, -0.5f, 0.0f));
+    m_game_state.enemies[1].set_acceleration(glm::vec3(0.0f, 0.0f, 0.0f));
+    m_game_state.enemies[1].set_collision_offset(glm::vec3(0.0f));
+    m_game_state.enemies[1].set_colision_dimension(1.0f, 0.75f);
     
     
+       
     m_game_state.jump_sfx = Mix_LoadWAV("assets/jump.wav");
+    m_game_state.die_sfx = Mix_LoadWAV("assets/die.wav");
 }
 
 void LevelC::update(float delta_time)
 {
     m_game_state.player->update(delta_time, m_game_state.player, m_game_state.enemies, ENEMY_COUNT, m_game_state.map);
+    
+//    const float LEFT_BOUND = 2.0f;
+//       const float RIGHT_BOUND = 12.0f;
+//       Entity &flyingEnemy = m_game_state.enemies[1];
+//       glm::vec3 pos = flyingEnemy.get_position();
+//       glm::vec3 movement = flyingEnemy.get_movement();
+//       // If no horizontal movement is set, initialize to moving right.
+//       if (glm::length(movement) == 0.0f) {
+//           movement.x = 1.0f;
+//           flyingEnemy.set_movement(movement);
+//           flyingEnemy.face_right();
+//       }
+//       // Update horizontal position.
+//       pos.x += flyingEnemy.get_speed() * delta_time * movement.x;
+//       // Reverse direction if boundaries reached.
+//       if (pos.x < LEFT_BOUND) {
+//           pos.x = LEFT_BOUND;
+//           flyingEnemy.set_movement(glm::vec3(1.0f, 0.0f, 0.0f));
+//           flyingEnemy.face_right();
+//       }
+//       else if (pos.x > RIGHT_BOUND) {
+//           pos.x = RIGHT_BOUND;
+//           flyingEnemy.set_movement(glm::vec3(-1.0f, 0.0f, 0.0f));
+//           flyingEnemy.face_left();
+//       }
+//       flyingEnemy.set_position(pos);
+//       // Call update to ensure collision and model matrix are updated.
+//       flyingEnemy.update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
 
-    // For each enemy, let ai_walk handle the patrol behavior.
     for (int i = 0; i < ENEMY_COUNT; i++)
     {
        m_game_state.enemies[i].ai_walk();
        m_game_state.enemies[i].update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
     }
+    // For each enemy, let ai_walk handle the patrol behavior.
+
+//   m_game_state.enemies[0].ai_walk();
+//   m_game_state.enemies[0].update(delta_time, m_game_state.player, NULL, 0, m_game_state.map);
+
+
     
     for (int i = 0; i < ENEMY_COUNT; i++){
         if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
-            m_game_state.life--;
-        }
-        if(m_game_state.life <=0){
-            return;
-        }
-    }
-    
-    for (int i = 0; i < ENEMY_COUNT; i++){
-        if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
+            Mix_PlayChannel(-1, m_game_state.die_sfx, 0);
             m_game_state.life--;
             if(m_game_state.life <=0){
                 m_game_state.next_scene_id = 5;
@@ -142,6 +182,6 @@ void LevelC::render(ShaderProgram *g_shader_program)
 {
     m_game_state.map->render(g_shader_program);
     m_game_state.player->render(g_shader_program);
-    for (int i = 0; i < m_number_of_enemies; i++)
+    for (int i = 0; i < ENEMY_COUNT; i++)
             m_game_state.enemies[i].render(g_shader_program);
 }

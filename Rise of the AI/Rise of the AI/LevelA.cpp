@@ -21,6 +21,8 @@ unsigned int LEVELA_DATA[] =
       29, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2
 };
 
+
+
 LevelA::~LevelA()
 {
     delete [] m_game_state.enemies;
@@ -28,11 +30,13 @@ LevelA::~LevelA()
     delete    m_game_state.map;
     Mix_FreeChunk(m_game_state.jump_sfx);
     Mix_FreeMusic(m_game_state.bgm);
+    Mix_FreeChunk(m_game_state.die_sfx);
 }
 
 void LevelA::initialise()
 {
     m_game_state.next_scene_id = -1;
+    m_game_state.life = 3;
     
     GLuint map_texture_id = Utility::load_texture("assets/tilemap_packed.png");
     m_game_state.map = new Map(LEVEL_WIDTH, LEVEL_HEIGHT, LEVELA_DATA, map_texture_id, 1.0f, 16, 7);
@@ -97,6 +101,7 @@ void LevelA::initialise()
 //    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
     
     m_game_state.jump_sfx = Mix_LoadWAV("assets/jump.wav");
+    m_game_state.die_sfx = Mix_LoadWAV("assets/die.wav");
 }
 
 void LevelA::update(float delta_time)
@@ -142,6 +147,7 @@ void LevelA::update(float delta_time)
     
     for (int i = 0; i < ENEMY_COUNT; i++){
         if(m_game_state.player->check_collision(&m_game_state.enemies[i])){
+            Mix_PlayChannel(-1, m_game_state.die_sfx, 0);
             m_game_state.life--;
             if(m_game_state.life <=0){
                 m_game_state.next_scene_id = 5;
@@ -155,7 +161,10 @@ void LevelA::update(float delta_time)
         
     }
     
-    if (m_game_state.player->get_position().y < -10.0f) m_game_state.next_scene_id += 1;
+    if (m_game_state.player->get_position().y < -10.0f) {
+        m_game_state.next_scene_id = 2;
+        
+    }
     
 
 }

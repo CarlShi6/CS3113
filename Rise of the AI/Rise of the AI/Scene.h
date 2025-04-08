@@ -29,6 +29,7 @@ struct GameState
     // ————— AUDIO ————— //
     Mix_Music *bgm;
     Mix_Chunk *jump_sfx;
+    Mix_Chunk *die_sfx;
     
     // ————— POINTERS TO OTHER SCENES ————— //
     int next_scene_id;
@@ -52,4 +53,5 @@ public:
     // ————— GETTERS ————— //
     GameState const get_state() const { return m_game_state;             }
     int const get_number_of_enemies() const { return m_number_of_enemies; }
+    void set_life(int new_life) {m_game_state.life = new_life;}
 };

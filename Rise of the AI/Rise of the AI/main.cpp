@@ -76,6 +76,10 @@ Mix_Chunk* g_lost_sound = nullptr;
 
 void switch_to_scene(Scene *scene)
 {
+    if (g_current_scene != nullptr) {
+            scene->set_life(g_current_scene->get_state().life);
+    }
+    
     g_current_scene = scene;
     g_current_scene->initialise();
 }
@@ -122,6 +126,8 @@ void initialise()
     
     glClearColor(BG_RED, BG_BLUE, BG_GREEN, BG_OPACITY);
     
+    
+    
     g_menu = new MenuScene();
     g_levelA = new LevelA();
     g_levelB = new LevelB();
@@ -136,7 +142,7 @@ void initialise()
     g_levels[4] = g_win;
     g_levels[5] = g_lost;
         
-
+    g_current_scene = g_menu;  
     switch_to_scene(g_menu);
     
     // ————— BLENDING ————— //
